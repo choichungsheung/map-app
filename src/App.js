@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { MapContainer, TileLayer, GeoJSON, Marker, Popup, Tooltip, useMap } from 'react-leaflet';
 import { Icon } from 'leaflet';
+import proj4 from 'proj4';
 import 'leaflet/dist/leaflet.css';
 import './App.css';
 import districts from './data/combined_districts.json';
@@ -13,6 +14,10 @@ const customMarkerIcon = new Icon({
   iconAnchor: [16, 48],
   popupAnchor: [0, -48]
 });
+
+// Define coordinate systems for HK80 to WGS84 conversion
+proj4.defs('EPSG:2326', '+proj=tmerc +lat_0=22.31213333333334 +lon_0=114.1785555555556 +k=1 +x_0=836694.05 +y_0=819069.8 +ellps=intl +towgs84=-162.619,-276.959,-161.764,0.067753,-2.24365,-1.15883,-1.09425 +units=m +no_defs');
+proj4.defs('EPSG:4326', '+proj=longlat +datum=WGS84 +no_defs');
 
 // Component to handle map panning
 function MapController({ panTo }) {
@@ -43,11 +48,11 @@ function App() {
     }
   };
 
-  const convertHK80ToWGS84 = async (x, y) => {
+  const convertHK80ToWGS84 = (x, y) => {
     try {
-      const response = await fetch(`http://www.geodetic.gov.hk/transform/v2/?inSys=hkgrid&outSys=wgsgeog&e=${x}&n=${y}`);
-      const data = await response.json();
-      return { lat: data.wgsLat, lon: data.wgsLong };
+      // Convert HK80 coordinates (EPSG:2326) to WGS84 (EPSG:4326)
+      const [lon, lat] = proj4('EPSG:2326', 'EPSG:4326', [x, y]);
+      return { lat, lon };
     } catch (error) {
       console.error('Coordinate conversion error:', error);
       return null;
