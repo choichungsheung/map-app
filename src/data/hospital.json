@@ -1,0 +1,86 @@
+[
+  {
+    "key": "MH",
+    "x": 833418,
+    "y": 813366,
+    "nameEN": "MATILDA INTERNATIONAL HOSPITAL",
+    "nameZH": "MH"
+  },
+  {
+    "key": "CUHKMC",
+    "x": 839813,
+    "y": 830468,
+    "nameEN": "CUHK Medical Centre",
+    "nameZH": "CUHKMC"
+  },
+  {
+    "key": "GHK",
+    "x": 836207.12760724,
+    "y": 812612.23769623,
+    "nameEN": "GLENEAGLES HOSPITAL",
+    "nameZH": "GHK"
+  },
+  {
+    "key": "HKSH",
+    "x": 836853,
+    "y": 814529,
+    "nameEN": "HONG KONG SANATORIUM & HOSPITAL",
+    "nameZH": "HKSH"
+  },
+  {
+    "key": "STPH",
+    "x": 837432,
+    "y": 815462,
+    "nameEN": "ST PAUL'S HOSPITAL",
+    "nameZH": "STPH"
+  },
+  {
+    "key": "UH",
+    "x": 836095,
+    "y": 824565,
+    "nameEN": "UNION HOSPITAL",
+    "nameZH": "UH"
+  },
+  {
+    "key": "HKAH",
+    "x": 837029,
+    "y": 813875,
+    "nameEN": "HONG KONG ADVENTIST HOSPITAL",
+    "nameZH": "HKAH"
+  },
+  {
+    "key": "TWAH",
+    "x": 828822,
+    "y": 826378,
+    "nameEN": "Hong Kong Adventist Hospital - Tsuen Wan",
+    "nameZH": "TWAH"
+  },
+  {
+    "key": "EH",
+    "x": 837294,
+    "y": 820697,
+    "nameEN": "Evangel Hospital",
+    "nameZH": "EH"
+  },
+  {
+    "key": "HKBH",
+    "x": 836586,
+    "y": 822257,
+    "nameEN": "HONG KONG BAPTIST HOSPITAL",
+    "nameZH": "HKBH"
+  },
+  {
+    "key": "CH",
+    "x": 833900.968,
+    "y": 815385.252,
+    "nameEN": "CANOSSA HOSPITAL",
+    "nameZH": "CH"
+  },
+  {
+    "key": "PBH",
+    "x": 834710,
+    "y": 821647,
+    "nameEN": "Precious Blood Hospital",
+    "nameZH": "PBH"
+  }
+]

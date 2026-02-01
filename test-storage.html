@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session Storage Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        .result { margin-top: 10px; padding: 10px; background: #f0f0f0; border-radius: 3px; }
+        pre { background: #fff; padding: 10px; border: 1px solid #ddd; overflow: auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Session Storage Test</h1>
+        
+        <div class="test-section">
+            <h3>Test Session Storage</h3>
+            <button onclick="testStorage()">Test Storage</button>
+            <button onclick="clearStorage()">Clear Storage</button>
+            <button onclick="reloadPage()">Reload Page</button>
+            <div class="result" id="result"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Test Marker Data</h3>
+            <button onclick="testMarkerData()">Test Marker Data</button>
+            <div class="result" id="markerResult"></div>
+        </div>
+    </div>
+
+    <script>
+        function testStorage() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '';
+            
+            try {
+                // Test basic storage
+                const testData = { test: 'value', number: 42 };
+                sessionStorage.setItem('testData', JSON.stringify(testData));
+                const retrievedData = JSON.parse(sessionStorage.getItem('testData'));
+                
+                resultDiv.innerHTML += `<p><strong>Basic Storage Test:</strong></p>`;
+                resultDiv.innerHTML += `<p>Stored: ${JSON.stringify(testData)}</p>`;
+                resultDiv.innerHTML += `<p>Retrieved: ${JSON.stringify(retrievedData)}</p>`;
+                resultDiv.innerHTML += `<p>Match: ${JSON.stringify(testData) === JSON.stringify(retrievedData) ? 'YES' : 'NO'}</p>`;
+                
+                // Test array storage
+                const testArray = [
+                    { id: 1, name: 'Test 1', type: 0 },
+                    { id: 2, name: 'Test 2', type: 1 }
+                ];
+                sessionStorage.setItem('testArray', JSON.stringify(testArray));
+                const retrievedArray = JSON.parse(sessionStorage.getItem('testArray'));
+                
+                resultDiv.innerHTML += `<p><strong>Array Storage Test:</strong></p>`;
+                resultDiv.innerHTML += `<p>Stored: ${JSON.stringify(testArray)}</p>`;
+                resultDiv.innerHTML += `<p>Retrieved: ${JSON.stringify(retrievedArray)}</p>`;
+                resultDiv.innerHTML += `<p>Match: ${JSON.stringify(testArray) === JSON.stringify(retrievedArray) ? 'YES' : 'NO'}</p>`;
+                
+                resultDiv.innerHTML += `<p><strong>All tests completed successfully!</strong></p>`;
+                
+            } catch (error) {
+                resultDiv.innerHTML += `<p style="color: red;"><strong>Error:</strong> ${error.message}</p>`;
+            }
+        }
+        
+        function clearStorage() {
+            sessionStorage.clear();
+            document.getElementById('result').innerHTML = '<p>Session storage cleared.</p>';
+        }
+        
+        function reloadPage() {
+            location.reload();
+        }
+        
+        function testMarkerData() {
+            const markerResultDiv = document.getElementById('markerResult');
+            markerResultDiv.innerHTML = '';
+            
+            try {
+                // Test marker-like data structure
+                const markerData = [
+                    {
+                        id: Date.now(),
+                        nameZH: '測試地點',
+                        nameEN: 'Test Location',
+                        districtZH: '測試區',
+                        lat: 22.3193,
+                        lon: 114.1694,
+                        type: 0,
+                        description: '這是一個測試地點'
+                    }
+                ];
+                
+                sessionStorage.setItem('mapMarkers', JSON.stringify(markerData));
+                const retrievedMarkers = JSON.parse(sessionStorage.getItem('mapMarkers'));
+                
+                markerResultDiv.innerHTML += `<p><strong>Marker Data Test:</strong></p>`;
+                markerResultDiv.innerHTML += `<p>Stored: <pre>${JSON.stringify(markerData, null, 2)}</pre></p>`;
+                markerResultDiv.innerHTML += `<p>Retrieved: <pre>${JSON.stringify(retrievedMarkers, null, 2)}</pre></p>`;
+                markerResultDiv.innerHTML += `<p>Match: ${JSON.stringify(markerData) === JSON.stringify(retrievedMarkers) ? 'YES' : 'NO'}</p>`;
+                
+            } catch (error) {
+                markerResultDiv.innerHTML += `<p style="color: red;"><strong>Error:</strong> ${error.message}</p>`;
+            }
+        }
+        
+        // Check if data exists on page load
+        window.onload = function() {
+            const existingData = sessionStorage.getItem('mapMarkers');
+            if (existingData) {
+                document.getElementById('result').innerHTML = `<p><strong>Existing data found:</strong> ${existingData}</p>`;
+            }
+        };
+    </script>
+</body>
+</html>
