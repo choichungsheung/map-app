@@ -382,17 +382,17 @@ function App() {
       const combinedResults = [...artificialMatches, ...data];
       
       // 3. Remove duplicates based on name (case insensitive)
-      const seen = new Set();
-      const uniqueResults = combinedResults.filter(result => {
-        const key = (result.nameEN || result.nameZH || '').toLowerCase();
-        if (seen.has(key)) {
-          return false;
-        }
-        seen.add(key);
-        return true;
-      });
+      // const seen = new Set();
+      // const uniqueResults = combinedResults.filter(result => {
+      //   const key = (result.nameEN || result.nameZH || '').toLowerCase();
+      //   if (seen.has(key)) {
+      //     return false;
+      //   }
+      //   seen.add(key);
+      //   return true;
+      // });
       
-      setSearchResults(uniqueResults.slice(0, 5)); // Limit to 5 results
+      setSearchResults(combinedResults.slice(0, 50)); // Limit to 50 results
     } catch (error) {
       console.error('Search error:', error);
       setSearchResults(artificialMatches);
@@ -464,7 +464,7 @@ function App() {
           <div className="search-results">
             {searchResults.map((result, index) => (
               <div key={index} className="search-result" onClick={() => addMarker(result)}>
-                <div>{result.nameZH} ({result.nameEN})</div>
+                <div>{result.nameZH} ({result.nameEN}) <span className="district">{result.districtZH}</span></div>
                 {result.addressEN && <div className="address">{result.addressEN}</div>}
               </div>
             ))}
