@@ -94,7 +94,7 @@ function MapController({ panTo }) {
 }
 
 // Component for markers with custom spiderfication logic
-function MarkersWithSpiderfication({ markers, useTooltip, typeToColor }) {
+function MarkersWithSpiderfication({ markers, useTooltip, typeToColor, onMarkerClick }) {
   const map = useMap();
   const [spiderfiedClusters, setSpiderfiedClusters] = useState(new Set());
   
@@ -152,11 +152,14 @@ function MarkersWithSpiderfication({ markers, useTooltip, typeToColor }) {
               key={marker.id} 
               position={[lat, lon]} 
               icon={createMarkerIcon(marker.type)}
+              eventHandlers={{
+                click: () => onMarkerClick && onMarkerClick(marker.id)
+              }}
             >
               {useTooltip ? (
                 <Tooltip permanent direction='top' offset={[0,-30]}>
                   <div>{marker.nameZH}</div>
-                  <div className="tooltip-description">{marker.description}</div>
+                  <pre className="tooltip-description">{marker.description}</pre>
                 </Tooltip>
               ) : (
                 <Popup>
@@ -180,25 +183,28 @@ function MarkersWithSpiderfication({ markers, useTooltip, typeToColor }) {
                     const spiderLat = lat + Math.sin(angle) * spiderRadius;
                     const spiderLon = lon + Math.cos(angle) * spiderRadius;
                     
-                    return (
-                      <Marker 
-                        key={marker.id} 
-                        position={[spiderLat, spiderLon]} 
-                        icon={createMarkerIcon(marker.type)}
-                      >
-                        {useTooltip ? (
-                          <Tooltip permanent direction='top' offset={[0,-30]}>
-                            <div>{marker.nameZH}</div>
-                            <div className="tooltip-description">{marker.description}</div>
-                          </Tooltip>
-                        ) : (
-                          <Popup>
-                            <div>{marker.nameZH}</div>
-                            <div>({marker.nameEN})</div>
-                          </Popup>
-                        )}
-                      </Marker>
-                    );
+                      return (
+                        <Marker 
+                          key={marker.id} 
+                          position={[spiderLat, spiderLon]} 
+                          icon={createMarkerIcon(marker.type)}
+                          eventHandlers={{
+                            click: () => onMarkerClick && onMarkerClick(marker.id)
+                          }}
+                        >
+                          {useTooltip ? (
+                            <Tooltip permanent direction='top' offset={[0,-30]}>
+                              <div>{marker.nameZH}</div>
+                              <pre className="tooltip-description">{marker.description}</pre>
+                            </Tooltip>
+                          ) : (
+                            <Popup>
+                              <div>{marker.nameZH}</div>
+                              <div>({marker.nameEN})</div>
+                            </Popup>
+                          )}
+                        </Marker>
+                      );
                   })}
                   {/* Spider legs connecting to center */}
                   {group.map((marker, index) => {
@@ -445,6 +451,27 @@ function App() {
     ));
   };
 
+  // Handle marker click from map to focus on list item
+  const handleMapMarkerClick = (markerId) => {
+    const markerElement = document.querySelector(`.marker-item[data-marker-id="${markerId}"]`);
+    if (markerElement) {
+      // Add glow effect
+      markerElement.classList.add('focused');
+      
+      // Scroll into view if needed
+      markerElement.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'center',
+        inline: 'nearest'
+      });
+      
+      // Remove glow after animation
+      setTimeout(() => {
+        markerElement.classList.remove('focused');
+      }, 1000);
+    }
+  };
+
   return (
     <div className="app">
       <div className="search-container">
@@ -515,7 +542,12 @@ function App() {
             </button>
           </div>
           {markers.map(marker => (
-            <div key={marker.id} className="marker-item" onClick={() => setPanToCoords([marker.lat, marker.lon])}>
+            <div 
+              key={marker.id} 
+              className="marker-item" 
+              onClick={() => setPanToCoords([marker.lat, marker.lon])}
+              data-marker-id={marker.id}
+            >
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' ,width: '100%'}}>
                 <div
                   className="marker-type-icon-container"
@@ -590,7 +622,7 @@ function App() {
                   ) : (
                     <div>
                       <div>{marker.nameZH}</div>
-                      <div className="description">{marker.description}</div>
+                      <pre className="description">{marker.description}</pre>
                     </div>
                   )}
                 </div>
@@ -711,6 +743,7 @@ function App() {
           markers={markers} 
           useTooltip={useTooltip} 
           typeToColor={typeToColor} 
+          onMarkerClick={handleMapMarkerClick}
         />
       </MapContainer>
       
